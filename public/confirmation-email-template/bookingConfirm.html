@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f9f9f9; /* Light background for the email */
+      }
+      .header {
+        background-color: #8a8a8a; /* Dark blue background for the header */
+        color: white; /* White text color */
+        text-align: center;
+        padding: 20px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        max-width: 600px;
+        margin: auto;
+      }
+      .header img {
+        width: 150px; /* Adjust the width of the logos */
+        margin: 0 10px; /* Space between logos and text */
+      }
+      .header-text {
+        font-size: 18px;
+        font-weight: bold;
+        margin: 0 15px; /* Space on either side of the text */
+      }
+      .content {
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        max-width: 600px; /* Maximum width for the content */
+        margin: auto; /* Center the content */
+        position: relative;
+      }
+      .signature {
+        font-size: 14px;
+        color: #333;
+      }
+      .signature a {
+        color: blue;
+        text-decoration: none;
+      }
+      .signature a:hover {
+        text-decoration: underline;
+      }
+      .signature .tagline {
+        font-style: italic;
+        color: black;
+      }
+      table {
+        width: 100%; /* Make the table width responsive */
+        border-collapse: collapse;
+        line-height: 1.6;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
+      th {
+        background-color: #f4f4f4;
+        font-weight: bold;
+      }
+      td.label {
+        font-weight: bold;
+        background-color: #fafafa;
+      }
+      td.value {
+        background-color: #ffffff;
+      }
+      .header-row {
+        background-color: #e2e2e2;
+        font-weight: bold;
+      }
+      .image {
+        margin-top: 20px;
+        text-align: center;
+      }
+      .image img {
+        max-width: 100%;
+        height: auto;
+      }
+      .note {
+        color: red;
+      }
+      .print-button {
+        background-color: #4caf50; /* Green background */
+        color: white; /* White text */
+        padding: 5px 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        float: right; /* Align the print button to the right */
+      }
+      .print-button:hover {
+        background-color: #45a049; /* Darker green on hover */
+      }
+    </style>
+    <script>
+      function printContent() {
+        window.print();
+      }
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      
+      <!-- -->
+      <!-- <div class="header-text">Employee Cancer Screening Campaign</div> -->
+      <!-- Text between the logos -->
+      <img src="https://www.fiserv.com/content/dam/fiserv-ent/final-files/digital-graphics/fiserv-com-graphics/fiserv-logo-orange-ff6600.svg" alt="Fiserv" />
+    </div>
+    <div class="content">
+      <p>
+        Dear {{name}},
+        <!-- <button class="print-button" onclick="printContent()">Print</button> -->
+        <!-- Print button to the far right of the greeting -->
+      </p>
+      <p>
+        Your booking has been received.
+      </p>
+      <table>
+        <tr class="header-row">
+          <th>Label</th>
+          <th>Value</th>
+        </tr>
+        <!-- <tr>
+          <td class="label">Package Name</td>
+          <td class="value">{{packageName}}</td>
+        </tr> -->
+        <tr>
+          <td class="label">Name</td>
+          <td class="value">{{bodyName}}</td>
+        </tr>
+        <!-- <tr>
+          <td class="label">Phone</td>
+          <td class="value">{{phone}}</td>
+        </tr> -->
+        <tr>
+          <td class="label">Tests Included</td>
+          <td class="value">{{testsIncluded}}</td>
+        </tr>
+        <tr>
+          <td class="label">Center Name</td>
+          <td class="value">{{centerName}}</td>
+        </tr>
+        <!-- <tr>
+          <td class="label">Address</td>
+          <td class="value">{{address}}</td>
+        </tr> -->
+        <tr>
+          <td class="label">Appointment Slot & Date</td>
+          <td class="value">{{appointmentSlotDate}}</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

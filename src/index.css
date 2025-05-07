@@ -1,0 +1,14 @@
+@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@theme {
+  --color-voloPink: #9F6A86;
+  --color-voloBlack: #000000;
+  --color-voloSmokyblacklight: #161212;
+  --color-voloSmokyblackdark: #120E0D;
+  --color-voloDark: #1F2937;
+  --color-finnovaOrange: #F36623;
+  --color-vfinnovaRed: #FF1F0A;
+}
