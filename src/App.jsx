@@ -18,8 +18,8 @@ export default function HealthCheckupForm() {
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState(""); // "success" | "error"
   const [loading, setLoading] = useState(false);
-  const [formSubmission, setFormSubmission] = useState(false)
-  
+  const [formSubmission, setFormSubmission] = useState(false);
+
   useEffect(() => {
     if (resendTimer > 0) {
       const timer = setInterval(() => {
@@ -34,6 +34,11 @@ export default function HealthCheckupForm() {
       setMessage("Please enter a valid email before requesting OTP.");
       setMessageType("error");
       return;
+    }
+    if (!email.toLowerCase().includes("@fiserv.com")) {
+      setMessage("Please enter your official email id.");
+      setMessageType("error");
+      return false;
     }
 
     const res = await fetch(
@@ -82,6 +87,11 @@ export default function HealthCheckupForm() {
   const isFormValid = () => {
     if (!name || !email || !location || !date || !time || !isVerified) {
       setMessage("Please fill all fields and verify your email.");
+      setMessageType("error");
+      return false;
+    }
+    if (!email.toLowerCase().includes("@fiserv.com")) {
+      setMessage("Please enter your official email id.");
       setMessageType("error");
       return false;
     }
@@ -142,7 +152,7 @@ export default function HealthCheckupForm() {
       const data = await response.json(); // <-- Fix here
       setMessage(data.message || "Submission complete.");
       setMessageType(data.success ? "success" : "error");
-      setFormSubmission(data.success)
+      setFormSubmission(data.success);
       if (data.success) {
         await sendBookingConfirmation();
       }
@@ -256,26 +266,18 @@ export default function HealthCheckupForm() {
             </Card>
           </div>
           <div className="w-1/2">
-            <Card className="w-full  bg-white/90 text-black rounded-2xl shadow-xl">
+            <Card className="w-full h-full  bg-white/90 text-black rounded-2xl shadow-xl">
               {formSubmission ? (
-                <CardContent>
-                  <h2 className="text-center">
-                    Thank you. Your form has been submitted.
-                  </h2>
-                </CardContent>
+                <div className="h-full flex items-center justify-center">
+                  <div>
+                    <h2 className="text-center">Thank you!</h2>
+                    <h2 className="text-center">
+                      Your form has been submitted.
+                    </h2>
+                  </div>
+                </div>
               ) : (
                 <CardContent className="p-6 space-y-6">
-                  {message && (
-                    <div
-                      className={`p-3 rounded text-sm font-medium ${
-                        messageType === "success"
-                          ? "bg-green-100 text-green-800"
-                          : "bg-red-100 text-red-800"
-                      }`}
-                    >
-                      {message}
-                    </div>
-                  )}
                   <h1 className="text-3xl font-bold mb-2 text-voloDark">
                     Registration Details
                   </h1>
@@ -398,7 +400,17 @@ export default function HealthCheckupForm() {
                         </select>
                       </div>
                     </div>
-
+                    {message && (
+                      <div
+                        className={`p-3 rounded text-sm font-medium ${
+                          messageType === "success"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-red-100 text-red-800"
+                        }`}
+                      >
+                        {message}
+                      </div>
+                    )}
                     <Button
                       type="submit"
                       className="w-full mt-4"
