@@ -126,7 +126,7 @@ export default function HealthCheckupForm() {
         body: JSON.stringify({
           s3Key: "fiserv-email-template/bookingConfirm.html",
           email: email.toLowerCase(),
-          subject: "HR Fair : Health check-ups - Your booking is confirmed",
+          subject: "HR Expo : Health check-ups - Your booking is confirmed",
           name: name,
           testsIncluded:
             "Eye checkup, Dental checkup, BMI check, Blood Sugar (Glucometer) & Blood Pressure, Bone Densitometry (recommended for 40+)",
@@ -469,7 +469,7 @@ export default function HealthCheckupForm() {
                           {/* <h1 className="text-xl font-bold mb-2">Note:</h1> */}
                           <ul className="list-disc pl-6 text-gray-700 space-y-1">
                             <li className="text-sm italic">
-                              The initiative is part of the “HR Fair”, associate
+                              The initiative is part of the “HR Expo, associate
                               may choose to go for one or all the
                               tests/check-ups listed above as per the selected
                               date & time mentioned in the form.
