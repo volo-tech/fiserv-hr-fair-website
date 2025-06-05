@@ -307,7 +307,7 @@ export default function HealthCheckupForm() {
                   <div className="h-full flex items-center justify-center">
                     <div>
                       <h1 className="text-3xl font-bold mb-2 text-voloDark">
-                        HR Fair : Health check-ups
+                        HR Expo : Health check-ups
                       </h1>
                       <h2 className="text-center">Thank you!</h2>
                       <h2 className="text-center">
