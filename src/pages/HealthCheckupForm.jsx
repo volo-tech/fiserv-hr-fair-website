@@ -187,14 +187,24 @@ export default function HealthCheckupForm() {
   const locationData = [
     "Noida",
     "Gurugram",
-    "Bengaluru",
+    "Bangalore",
     "Thane",
     "Pune",
     "Chennai",
   ];
 
+  const slotsPerHourByLocation = {
+    Noida: 120,
+    Gurugram: 60,
+    Pune: 180,
+    Thane: 60,
+    Chennai: 60,
+    Bangalore: 60,
+  };
+
   const locationTimeSlots = {
     Gurugram: [
+      "10am-11am",
       "11am-12pm",
       "12pm-1pm",
       "1pm-2pm",
@@ -220,6 +230,10 @@ export default function HealthCheckupForm() {
       : location
       ? locationTimeSlots["default"]
       : [];
+
+  const selectedLocationSlotsPerHour = location
+    ? slotsPerHourByLocation[location]
+    : null;
 
   return (
     <>
@@ -256,7 +270,7 @@ export default function HealthCheckupForm() {
                           Event Details
                         </h1>
                         <p className="text-xl text-voloSmokyblacklight">
-                          <strong>Event Date:</strong> June 11th & 12th, 2025
+                          <strong>Event Date:</strong> May 21st & 22nd, 2026
                         </p>
                         <p className="text-xl text-voloSmokyblacklight">
                           <strong>Timings:</strong> 10:00 AM – 5:00 PM
@@ -404,6 +418,11 @@ export default function HealthCheckupForm() {
                               </option>
                             ))}
                         </select>
+                        {selectedLocationSlotsPerHour && (
+                          <p className="mt-2 text-sm text-gray-600">
+                            Slots per hour: {selectedLocationSlotsPerHour}
+                          </p>
+                        )}
                       </div>
 
                       <div className="flex flex-col sm:flex-row gap-4">
@@ -417,11 +436,11 @@ export default function HealthCheckupForm() {
                             required
                           >
                             <option value="">-- Select Date --</option>
-                            <option value="11th June, 2025">
-                              11th June, 2025
+                            <option value="21st May, 2026">
+                              21st May, 2026
                             </option>
-                            <option value="12th June, 2025">
-                              12th June, 2025
+                            <option value="22nd May, 2026">
+                              22nd May, 2026
                             </option>
                           </select>
                         </div>
