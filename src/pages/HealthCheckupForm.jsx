@@ -270,10 +270,13 @@ export default function HealthCheckupForm() {
                           Event Details
                         </h1>
                         <p className="text-xl text-voloSmokyblacklight">
-                          <strong>Event Date:</strong> May 21st & 22nd, 2026
+                          <strong>Event Date:</strong> May 20th & 21st, 2026
                         </p>
                         <p className="text-xl text-voloSmokyblacklight">
                           <strong>Timings:</strong> 10:00 AM – 5:00 PM
+                        </p>
+                        <p className="text-xl text-voloSmokyblacklight">
+                          <strong>Registration Dates:</strong> May 11th to 15th, 2026
                         </p>
                       </div>
                     </CardContent>
@@ -436,11 +439,11 @@ export default function HealthCheckupForm() {
                             required
                           >
                             <option value="">-- Select Date --</option>
+                            <option value="20th May, 2026">
+                              20th May, 2026
+                            </option>
                             <option value="21st May, 2026">
                               21st May, 2026
-                            </option>
-                            <option value="22nd May, 2026">
-                              22nd May, 2026
                             </option>
                           </select>
                         </div>
