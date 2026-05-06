@@ -4,6 +4,23 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 
+const REGISTRATION_END_DATE = "2026-05-15";
+
+const getIndiaDateString = () => {
+  const formatter = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Kolkata",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+  const parts = formatter.formatToParts(new Date());
+  const year = parts.find((part) => part.type === "year")?.value;
+  const month = parts.find((part) => part.type === "month")?.value;
+  const day = parts.find((part) => part.type === "day")?.value;
+
+  return `${year}-${month}-${day}`;
+};
+
 export default function HealthCheckupForm() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -20,6 +37,12 @@ export default function HealthCheckupForm() {
   const [loading, setLoading] = useState(false);
   const [formSubmission, setFormSubmission] = useState(false);
   const [loadingOtp, setLoadingOtp] = useState(false);
+  const currentIndiaDate = getIndiaDateString();
+  const isRegistrationOpen = currentIndiaDate <= REGISTRATION_END_DATE;
+  const registrationStatusMessage =
+    currentIndiaDate > REGISTRATION_END_DATE
+      ? "Registration closed on May 15th, 2026."
+      : "";
 
   useEffect(() => {
     if (resendTimer > 0) {
@@ -31,6 +54,12 @@ export default function HealthCheckupForm() {
   }, [resendTimer]);
 
   const sendOtp = async () => {
+    if (!isRegistrationOpen) {
+      setMessage(registrationStatusMessage);
+      setMessageType("error");
+      return;
+    }
+
     setLoadingOtp(true);
     console.log(
       !email.toLowerCase().includes("@fiserv.com") &&
@@ -77,6 +106,12 @@ export default function HealthCheckupForm() {
   };
 
   const verifyOtp = async () => {
+    if (!isRegistrationOpen) {
+      setMessage(registrationStatusMessage);
+      setMessageType("error");
+      return;
+    }
+
     const res = await fetch(
       "https://webapp.canswer.dcodecare.com/rest/pes/verify-fiserv-otp",
       {
@@ -98,6 +133,12 @@ export default function HealthCheckupForm() {
   };
 
   const isFormValid = () => {
+    if (!isRegistrationOpen) {
+      setMessage(registrationStatusMessage);
+      setMessageType("error");
+      return false;
+    }
+
     if (!name || !email || !location || !date || !time || !isVerified) {
       setMessage(
         "Please fill all fields and verify your email by clicking on Send OTP"
@@ -337,6 +378,11 @@ export default function HealthCheckupForm() {
                     <h1 className="text-3xl font-bold mb-2 text-voloDark">
                       Registration Details
                     </h1>
+                    {!isRegistrationOpen && (
+                      <div className="rounded bg-amber-100 p-3 text-sm font-medium text-amber-900">
+                        {registrationStatusMessage}
+                      </div>
+                    )}
                     <form onSubmit={handleSubmit} className="mt-10 space-y-4">
                       <div>
                         <Label htmlFor="name">Name</Label>
@@ -346,6 +392,7 @@ export default function HealthCheckupForm() {
                           value={name}
                           onChange={(e) => setName(e.target.value)}
                           required
+                          disabled={!isRegistrationOpen}
                         />
                       </div>
 
@@ -360,12 +407,17 @@ export default function HealthCheckupForm() {
                             onChange={(e) => setEmail(e.target.value)}
                             required
                             readOnly={isVerified}
+                            disabled={!isRegistrationOpen}
                           />
                           {!isVerified ? (
                             <Button
                               type="button"
                               onClick={sendOtp}
-                              disabled={resendTimer > 0 || loadingOtp}
+                              disabled={
+                                !isRegistrationOpen ||
+                                resendTimer > 0 ||
+                                loadingOtp
+                              }
                               className="whitespace-nowrap"
                             >
                               {resendTimer > 0
@@ -391,8 +443,13 @@ export default function HealthCheckupForm() {
                               placeholder="Enter OTP"
                               value={otp}
                               onChange={(e) => setOtp(e.target.value)}
+                              disabled={!isRegistrationOpen}
                             />
-                            <Button type="button" onClick={verifyOtp}>
+                            <Button
+                              type="button"
+                              onClick={verifyOtp}
+                              disabled={!isRegistrationOpen}
+                            >
                               Verify
                             </Button>
                           </div>
@@ -410,6 +467,7 @@ export default function HealthCheckupForm() {
                           }}
                           className="w-full p-2 rounded border border-gray-300"
                           required
+                          disabled={!isRegistrationOpen}
                         >
                           <option value="">-- Select Location --</option>
                           {locationData
@@ -437,6 +495,7 @@ export default function HealthCheckupForm() {
                             onChange={(e) => setDate(e.target.value)}
                             className="w-full p-2 rounded border border-gray-300"
                             required
+                            disabled={!isRegistrationOpen}
                           >
                             <option value="">-- Select Date --</option>
                             <option value="20th May, 2026">
@@ -456,6 +515,7 @@ export default function HealthCheckupForm() {
                             onChange={(e) => setTime(e.target.value)}
                             className="w-full p-2 rounded border border-gray-300"
                             required
+                            disabled={!isRegistrationOpen}
                           >
                             <option value="">-- Select Time Slot --</option>
                             {timeSlots.map((slot) => (
@@ -480,7 +540,7 @@ export default function HealthCheckupForm() {
                       <Button
                         type="submit"
                         className="w-full mt-4"
-                        disabled={loading}
+                        disabled={loading || !isRegistrationOpen}
                       >
                         {loading ? "Submitting..." : "Submit"}
                       </Button>
