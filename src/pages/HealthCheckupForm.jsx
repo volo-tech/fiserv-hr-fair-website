@@ -5,6 +5,8 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 
 const REGISTRATION_END_DATE = "2026-05-15";
+const SLOT_AVAILABILITY_API_URL =
+  "https://webapp.canswer.dcodecare.com/rest/pes/check-slot-availablity";
 
 const getIndiaDateString = () => {
   const formatter = new Intl.DateTimeFormat("en-US", {
@@ -19,6 +21,14 @@ const getIndiaDateString = () => {
   const day = parts.find((part) => part.type === "day")?.value;
 
   return `${year}-${month}-${day}`;
+};
+
+const getBackendCityValue = (city) =>
+  city === "Bangalore" ? "Bengaluru" : city;
+
+const getRemainingSlotsFromMessage = (slotMessage) => {
+  const match = slotMessage.match(/(\d+)\s+slot/i);
+  return match ? Number(match[1]) : null;
 };
 
 export default function HealthCheckupForm() {
@@ -37,6 +47,10 @@ export default function HealthCheckupForm() {
   const [loading, setLoading] = useState(false);
   const [formSubmission, setFormSubmission] = useState(false);
   const [loadingOtp, setLoadingOtp] = useState(false);
+  const [slotAvailabilityMessage, setSlotAvailabilityMessage] = useState("");
+  const [slotAvailabilityType, setSlotAvailabilityType] = useState("");
+  const [isCheckingSlot, setIsCheckingSlot] = useState(false);
+  const [isSlotAvailable, setIsSlotAvailable] = useState(true);
   const currentIndiaDate = getIndiaDateString();
   const isRegistrationOpen = currentIndiaDate <= REGISTRATION_END_DATE;
   const registrationStatusMessage =
@@ -52,6 +66,68 @@ export default function HealthCheckupForm() {
       return () => clearInterval(timer);
     }
   }, [resendTimer]);
+
+  useEffect(() => {
+    if (!location || !date || !time) {
+      setSlotAvailabilityMessage("");
+      setSlotAvailabilityType("");
+      setIsSlotAvailable(true);
+      setIsCheckingSlot(false);
+      return;
+    }
+
+    let isCancelled = false;
+
+    const checkSlotAvailability = async () => {
+      setIsCheckingSlot(true);
+      setSlotAvailabilityMessage("Checking slot availability...");
+      setSlotAvailabilityType("");
+
+      try {
+        const params = new URLSearchParams({
+          slot: time,
+          date,
+          city: getBackendCityValue(location).toLowerCase(),
+        });
+        const response = await fetch(
+          `${SLOT_AVAILABILITY_API_URL}?${params.toString()}`
+        );
+        const data = await response.json();
+
+        if (isCancelled) return;
+
+        const availabilityMessage =
+          data.message ||
+          (data.success === false ? "No slots available." : "Slots available.");
+        const slotOpen =
+          response.ok &&
+          data.success !== false &&
+          !/slots?\s*full/i.test(availabilityMessage);
+
+        setIsSlotAvailable(slotOpen);
+        setSlotAvailabilityMessage(availabilityMessage);
+        setSlotAvailabilityType(slotOpen ? "success" : "error");
+      } catch (error) {
+        if (isCancelled) return;
+
+        setIsSlotAvailable(true);
+        setSlotAvailabilityMessage(
+          "Could not check slot availability right now."
+        );
+        setSlotAvailabilityType("error");
+      } finally {
+        if (!isCancelled) {
+          setIsCheckingSlot(false);
+        }
+      }
+    };
+
+    checkSlotAvailability();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [date, location, time]);
 
   const sendOtp = async () => {
     if (!isRegistrationOpen) {
@@ -154,6 +230,16 @@ export default function HealthCheckupForm() {
       setMessageType("error");
       return false;
     }
+    if (isCheckingSlot) {
+      setMessage("Checking slot availability. Please wait.");
+      setMessageType("error");
+      return false;
+    }
+    if (!isSlotAvailable) {
+      setMessage(slotAvailabilityMessage || "No slots available.");
+      setMessageType("error");
+      return false;
+    }
     return true;
   };
 
@@ -190,7 +276,7 @@ export default function HealthCheckupForm() {
     const formData = {
       name,
       Email: email,
-      city: location,
+      city: getBackendCityValue(location),
       date,
       slot: time,
       key: "Fiserv.csv",
@@ -213,6 +299,11 @@ export default function HealthCheckupForm() {
       setMessage(data.message || "Submission complete.");
       setMessageType(data.success ? "success" : "error");
       setFormSubmission(data.success);
+      if (!data.success) {
+        setIsSlotAvailable(!/slots?\s*full/i.test(data.message || ""));
+        setSlotAvailabilityMessage(data.message || "");
+        setSlotAvailabilityType(data.success ? "success" : "error");
+      }
       if (data.success) {
         await sendBookingConfirmation();
       }
@@ -275,6 +366,7 @@ export default function HealthCheckupForm() {
   const selectedLocationSlotsPerHour = location
     ? slotsPerHourByLocation[location]
     : null;
+  const remainingSlots = getRemainingSlotsFromMessage(slotAvailabilityMessage);
 
   return (
     <>
@@ -481,7 +573,12 @@ export default function HealthCheckupForm() {
                         </select>
                         {selectedLocationSlotsPerHour && (
                           <p className="mt-2 text-sm text-gray-600">
-                            Slots per hour: {selectedLocationSlotsPerHour}
+                            Max capacity per hour: {selectedLocationSlotsPerHour}
+                          </p>
+                        )}
+                        {remainingSlots !== null && (
+                          <p className="mt-1 text-sm font-medium text-voloDark">
+                            Remaining slots for selected hour: {remainingSlots}
                           </p>
                         )}
                       </div>
@@ -526,6 +623,19 @@ export default function HealthCheckupForm() {
                           </select>
                         </div>
                       </div>
+                      {slotAvailabilityMessage && (
+                        <div
+                          className={`p-3 rounded text-sm font-medium ${
+                            slotAvailabilityType === "success"
+                              ? "bg-green-100 text-green-800"
+                              : slotAvailabilityType === "error"
+                              ? "bg-red-100 text-red-800"
+                              : "bg-gray-100 text-gray-800"
+                          }`}
+                        >
+                          {slotAvailabilityMessage}
+                        </div>
+                      )}
                       {message && (
                         <div
                           className={`p-3 rounded text-sm font-medium ${
@@ -540,9 +650,18 @@ export default function HealthCheckupForm() {
                       <Button
                         type="submit"
                         className="w-full mt-4"
-                        disabled={loading || !isRegistrationOpen}
+                        disabled={
+                          loading ||
+                          !isRegistrationOpen ||
+                          isCheckingSlot ||
+                          !isSlotAvailable
+                        }
                       >
-                        {loading ? "Submitting..." : "Submit"}
+                        {loading
+                          ? "Submitting..."
+                          : isCheckingSlot
+                          ? "Checking availability..."
+                          : "Submit"}
                       </Button>
                     </form>
                     <Card className="w-full bg-white/90 text-black rounded-2xl shadow-xl mt-5">
