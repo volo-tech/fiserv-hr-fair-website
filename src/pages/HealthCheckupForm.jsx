@@ -674,7 +674,7 @@ export default function HealthCheckupForm() {
                               </button>
                             ) : (
                               <>
-                                <p className="mt-2 text-sm leading-6 text-gray-600">
+                                <p className="mt-2 text-sm leading-6 text-gray-800 font-medium">
                                   I am providing personal, including medical,
                                   information of my own free will and accord.
                                   The information shared by me will be used
