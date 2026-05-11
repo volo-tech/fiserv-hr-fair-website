@@ -642,10 +642,19 @@ export default function HealthCheckupForm() {
                           {slotAvailabilityMessage}
                         </div>
                       )}
-                      <div className="rounded border border-gray-200 bg-gray-50 p-4">
+                      <div className="rounded-xl border border-gray-200 bg-white/95 p-4 shadow-sm">
+                        <div className="mb-3">
+                          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
+                            Consent Declaration
+                          </p>
+                          <p className="mt-1 text-sm text-gray-600">
+                            Please review and confirm the statement below
+                            before submitting your registration.
+                          </p>
+                        </div>
                         <label
                           htmlFor="consent"
-                          className="flex items-start gap-3 text-sm text-gray-700"
+                          className="flex items-start gap-3 rounded-lg border border-gray-200 bg-gray-50 p-3 text-sm leading-6 text-gray-700 transition-colors hover:border-gray-300"
                         >
                           <input
                             id="consent"
@@ -653,7 +662,7 @@ export default function HealthCheckupForm() {
                             checked={hasConsent}
                             onChange={(e) => setHasConsent(e.target.checked)}
                             disabled={!isRegistrationOpen}
-                            className="mt-1 h-4 w-4 shrink-0"
+                            className="mt-1 h-4 w-4 shrink-0 rounded border-gray-300 text-voloDark focus:ring-2 focus:ring-voloPink/40"
                           />
                           <span>
                             I am voluntarily participating in this Health
