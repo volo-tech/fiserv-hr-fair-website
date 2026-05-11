@@ -42,6 +42,7 @@ export default function HealthCheckupForm() {
   const [jwtToken, setJwtToken] = useState("");
   const [isVerified, setIsVerified] = useState(false);
   const [hasConsent, setHasConsent] = useState(false);
+  const [showConsentDetails, setShowConsentDetails] = useState(false);
   const [resendTimer, setResendTimer] = useState(0);
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState(""); // "success" | "error"
@@ -648,8 +649,9 @@ export default function HealthCheckupForm() {
                             Consent Declaration
                           </p>
                           <p className="mt-1 text-sm text-gray-600">
-                            Please review and confirm the statement below
-                            before submitting your registration.
+                            Please confirm that you consent to the use of your
+                            registration and medical information for the Health
+                            Checkup Camp as part of HR Expo 2026.
                           </p>
                         </div>
                         <label
@@ -664,21 +666,42 @@ export default function HealthCheckupForm() {
                             disabled={!isRegistrationOpen}
                             className="mt-1 h-4 w-4 shrink-0 rounded border-gray-300 text-voloDark focus:ring-2 focus:ring-voloPink/40"
                           />
-                          <span>
-                            I am voluntarily participating in this Health
-                            Checkup Camp as a part of HR Expo 2026 and am
-                            providing personal including medical information on
-                            my free will and accord. I understand that the
-                            information provided by me will be only for
-                            registration and Health Checkup purposes and will
-                            be shared on a strict need to know basis. The
-                            shared information will be kept confidential and
-                            will not be shared with third parties unless
-                            required for the services rendered in the Health
-                            Checkup Camp as a part of HR Expo 2026. By
-                            submitting my information, I give my consent for
-                            the use of the information shared by me.
-                          </span>
+                          <div className="min-w-0">
+                            <p className="line-clamp-2 font-medium text-gray-800">
+                              I am voluntarily participating in this Health
+                              Checkup Camp as a part of HR Expo 2026 and give
+                              my consent for the use of the information shared
+                              by me for registration and Health Checkup
+                              purposes.
+                            </p>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setShowConsentDetails((prev) => !prev)
+                              }
+                              className="mt-1 text-sm font-semibold text-voloDark underline underline-offset-2"
+                            >
+                              {showConsentDetails ? "Read less" : "Read more"}
+                            </button>
+                            {showConsentDetails && (
+                              <p className="mt-2 text-sm leading-6 text-gray-600">
+                                I am voluntarily participating in this Health
+                                Checkup Camp as a part of HR Expo 2026 and am
+                                providing personal including medical
+                                information on my free will and accord. I
+                                understand that the information provided by me
+                                will be only for registration and Health
+                                Checkup purposes and will be shared on a strict
+                                need to know basis. The shared information will
+                                be kept confidential and will not be shared
+                                with third parties unless required for the
+                                services rendered in the Health Checkup Camp as
+                                a part of HR Expo 2026. By submitting my
+                                information, I give my consent for the use of
+                                the information shared by me.
+                              </p>
+                            )}
+                          </div>
                         </label>
                       </div>
                       {message && (
