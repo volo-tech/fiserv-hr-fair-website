@@ -656,10 +656,12 @@ export default function HealthCheckupForm() {
                           <div className="min-w-0">
                             <p className="font-medium text-gray-800">
                               I am voluntarily participating in this Health
-                              Checkup Camp as a part of HR Expo 2026 and give
-                              my consent for the use of the information shared
-                              by me for registration and Health Checkup
-                              purposes.
+                              Checkup Camp as a part of HR Expo 2026 and
+                              consent to the use of the information shared by
+                              me for registration and health checkup purposes.
+                              I understand that my information will be handled
+                              confidentially and shared only on a strict
+                              need-to-know basis.
                             </p>
                             <button
                               type="button"
@@ -672,16 +674,14 @@ export default function HealthCheckupForm() {
                             </button>
                             {showConsentDetails && (
                               <p className="mt-2 text-sm leading-6 text-gray-600">
-                                I am providing personal including medical
-                                information on my free will and accord. I
-                                understand that the information provided by me
-                                will be only for registration and Health
-                                Checkup purposes and will be shared on a strict
-                                need to know basis. The shared information will
-                                be kept confidential and will not be shared
-                                with third parties unless required for the
-                                services rendered in the Health Checkup Camp as
-                                a part of HR Expo 2026.
+                                I am providing personal, including medical,
+                                information of my own free will and accord. The
+                                information shared by me will be used solely for
+                                registration and health checkup purposes related
+                                to HR Expo 2026. It will be kept confidential
+                                and will not be shared with third parties unless
+                                required for the services rendered as part of
+                                the Health Checkup Camp.
                               </p>
                             )}
                           </div>
