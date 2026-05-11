@@ -41,6 +41,7 @@ export default function HealthCheckupForm() {
   const [otpSent, setOtpSent] = useState(false);
   const [jwtToken, setJwtToken] = useState("");
   const [isVerified, setIsVerified] = useState(false);
+  const [hasConsent, setHasConsent] = useState(false);
   const [resendTimer, setResendTimer] = useState(0);
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState(""); // "success" | "error"
@@ -240,6 +241,11 @@ export default function HealthCheckupForm() {
       setMessageType("error");
       return false;
     }
+    if (!hasConsent) {
+      setMessage("Please provide your consent before submitting.");
+      setMessageType("error");
+      return false;
+    }
     return true;
   };
 
@@ -421,7 +427,7 @@ export default function HealthCheckupForm() {
                   <CardContent className="p-6 space-y-6">
                     <div>
                       <h1 className="text-3xl text-voloDark font-bold">
-                        Welcome!
+                        Welcome to HR EXPO 2026
                       </h1>
                       <p className="mt-2 text-gray-700 text">
                         Request you to please enter the details for all the
@@ -636,6 +642,36 @@ export default function HealthCheckupForm() {
                           {slotAvailabilityMessage}
                         </div>
                       )}
+                      <div className="rounded border border-gray-200 bg-gray-50 p-4">
+                        <label
+                          htmlFor="consent"
+                          className="flex items-start gap-3 text-sm text-gray-700"
+                        >
+                          <input
+                            id="consent"
+                            type="checkbox"
+                            checked={hasConsent}
+                            onChange={(e) => setHasConsent(e.target.checked)}
+                            disabled={!isRegistrationOpen}
+                            className="mt-1 h-4 w-4 shrink-0"
+                          />
+                          <span>
+                            I am voluntarily participating in this Health
+                            Checkup Camp as a part of HR Expo 2026 and am
+                            providing personal including medical information on
+                            my free will and accord. I understand that the
+                            information provided by me will be only for
+                            registration and Health Checkup purposes and will
+                            be shared on a strict need to know basis. The
+                            shared information will be kept confidential and
+                            will not be shared with third parties unless
+                            required for the services rendered in the Health
+                            Checkup Camp as a part of HR Expo 2026. By
+                            submitting my information, I give my consent for
+                            the use of the information shared by me.
+                          </span>
+                        </label>
+                      </div>
                       {message && (
                         <div
                           className={`p-3 rounded text-sm font-medium ${
@@ -654,7 +690,8 @@ export default function HealthCheckupForm() {
                           loading ||
                           !isRegistrationOpen ||
                           isCheckingSlot ||
-                          !isSlotAvailable
+                          !isSlotAvailable ||
+                          !hasConsent
                         }
                       >
                         {loading
@@ -670,14 +707,21 @@ export default function HealthCheckupForm() {
                           {/* <h1 className="text-xl font-bold mb-2">Note:</h1> */}
                           <ul className="list-disc pl-6 text-gray-700 space-y-1">
                             <li className="text-sm italic">
-                              The initiative is part of the “HR Expo, associate
-                              may choose to go for one or all the
-                              tests/check-ups listed above as per the selected
-                              date & time mentioned in the form.
+                              <strong>
+                                The initiative is part of the “HR Expo 2026”,
+                                associate may choose to go for one or all the
+                                tests/check-ups listed above as per the
+                                selected date & time mentioned in the form.
+                              </strong>
                             </li>
                             <li className="text-sm italic">
-                              “Bone Densitometry checkup” advisable for
-                              associates in age group 40 years & above.
+                              Bone Densitometry is only for associates aged 40
+                              years and above.
+                            </li>
+                            <li className="text-sm italic">
+                              This is on a first come first serve basis, so
+                              block your seats accordingly and please adhere to
+                              your slot as reschedule would not be possible.
                             </li>
                           </ul>
                         </div>
