@@ -663,26 +663,36 @@ export default function HealthCheckupForm() {
                               confidentially and shared only on a strict
                               need-to-know basis.
                             </p>
-                            <button
-                              type="button"
-                              onClick={() =>
-                                setShowConsentDetails((prev) => !prev)
-                              }
-                              className="mt-1 text-sm font-semibold text-voloDark underline underline-offset-2"
-                            >
-                              {showConsentDetails ? "Read less" : "Read more"}
-                            </button>
-                            {showConsentDetails && (
-                              <p className="mt-2 text-sm leading-6 text-gray-600">
-                                I am providing personal, including medical,
-                                information of my own free will and accord. The
-                                information shared by me will be used solely for
-                                registration and health checkup purposes related
-                                to HR Expo 2026. It will be kept confidential
-                                and will not be shared with third parties unless
-                                required for the services rendered as part of
-                                the Health Checkup Camp.
-                              </p>
+
+                            {!showConsentDetails ? (
+                              <button
+                                type="button"
+                                onClick={() => setShowConsentDetails(true)}
+                                className="inline text-sm font-semibold text-voloDark underline underline-offset-2 ml-1"
+                              >
+                                ...Read more
+                              </button>
+                            ) : (
+                              <>
+                                <p className="mt-2 text-sm leading-6 text-gray-600">
+                                  I am providing personal, including medical,
+                                  information of my own free will and accord.
+                                  The information shared by me will be used
+                                  solely for registration and health checkup
+                                  purposes related to HR Expo 2026. It will be
+                                  kept confidential and will not be shared with
+                                  third parties unless required for the services
+                                  rendered as part of the Health Checkup Camp.
+                                </p>
+
+                                <button
+                                  type="button"
+                                  onClick={() => setShowConsentDetails(false)}
+                                  className="mt-2 text-sm font-semibold text-voloDark underline underline-offset-2"
+                                >
+                                  Read less
+                                </button>
+                              </>
                             )}
                           </div>
                         </label>
