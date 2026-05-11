@@ -644,16 +644,6 @@ export default function HealthCheckupForm() {
                         </div>
                       )}
                       <div className="rounded-xl border border-gray-200 bg-white/95 p-4 shadow-sm">
-                        <div className="mb-3">
-                          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
-                            Consent Declaration
-                          </p>
-                          <p className="mt-1 text-sm text-gray-600">
-                            Please confirm that you consent to the use of your
-                            registration and medical information for the Health
-                            Checkup Camp as part of HR Expo 2026.
-                          </p>
-                        </div>
                         <label
                           htmlFor="consent"
                           className="flex items-start gap-3 rounded-lg border border-gray-200 bg-gray-50 p-3 text-sm leading-6 text-gray-700 transition-colors hover:border-gray-300"
