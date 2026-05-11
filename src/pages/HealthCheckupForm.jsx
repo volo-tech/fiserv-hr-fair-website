@@ -415,9 +415,6 @@ export default function HealthCheckupForm() {
                         <p className="text-xl text-voloSmokyblacklight">
                           <strong>Timings:</strong> 10:00 AM – 5:00 PM
                         </p>
-                        <p className="text-xl text-voloSmokyblacklight">
-                          <strong>Registration Dates:</strong> May 11th to 15th, 2026
-                        </p>
                       </div>
                     </CardContent>
                   </Card>
@@ -439,7 +436,7 @@ export default function HealthCheckupForm() {
                         <li>Dental checkup</li>
                         <li>BMI check</li>
                         <li>Blood Sugar (Glucometer) & Blood Pressure</li>
-                        <li>Bone Densitometry (recommended for 40+)</li>
+                        <li>Bone Densitometry (only for 40 years and above)</li>
                       </ul>
                       <Button
                         className="block md:hidden w-full mt-4"
@@ -657,7 +654,7 @@ export default function HealthCheckupForm() {
                             className="mt-1 h-4 w-4 shrink-0 rounded border-gray-300 text-voloDark focus:ring-2 focus:ring-voloPink/40"
                           />
                           <div className="min-w-0">
-                            <p className="line-clamp-2 font-medium text-gray-800">
+                            <p className="font-medium text-gray-800">
                               I am voluntarily participating in this Health
                               Checkup Camp as a part of HR Expo 2026 and give
                               my consent for the use of the information shared
@@ -675,9 +672,7 @@ export default function HealthCheckupForm() {
                             </button>
                             {showConsentDetails && (
                               <p className="mt-2 text-sm leading-6 text-gray-600">
-                                I am voluntarily participating in this Health
-                                Checkup Camp as a part of HR Expo 2026 and am
-                                providing personal including medical
+                                I am providing personal including medical
                                 information on my free will and accord. I
                                 understand that the information provided by me
                                 will be only for registration and Health
@@ -686,9 +681,7 @@ export default function HealthCheckupForm() {
                                 be kept confidential and will not be shared
                                 with third parties unless required for the
                                 services rendered in the Health Checkup Camp as
-                                a part of HR Expo 2026. By submitting my
-                                information, I give my consent for the use of
-                                the information shared by me.
+                                a part of HR Expo 2026.
                               </p>
                             )}
                           </div>
@@ -729,12 +722,10 @@ export default function HealthCheckupForm() {
                           {/* <h1 className="text-xl font-bold mb-2">Note:</h1> */}
                           <ul className="list-disc pl-6 text-gray-700 space-y-1">
                             <li className="text-sm italic">
-                              <strong>
-                                The initiative is part of the “HR Expo 2026”,
-                                associate may choose to go for one or all the
-                                tests/check-ups listed above as per the
-                                selected date & time mentioned in the form.
-                              </strong>
+                              The initiative is part of the “HR Expo 2026”,
+                              associate may choose to go for one or all the
+                              tests/check-ups listed above as per the selected
+                              date & time mentioned in the form.
                             </li>
                             <li className="text-sm italic">
                               Bone Densitometry is only for associates aged 40
