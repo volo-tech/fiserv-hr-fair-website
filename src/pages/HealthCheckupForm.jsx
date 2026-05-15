@@ -4,7 +4,7 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 
-const REGISTRATION_END_DATE = "2026-05-15";
+const REGISTRATION_END_DATE = "2026-05-19";
 const SLOT_AVAILABILITY_API_URL =
   "https://webapp.canswer.dcodecare.com/rest/pes/check-slot-availablity";
 
@@ -57,7 +57,7 @@ export default function HealthCheckupForm() {
   const isRegistrationOpen = currentIndiaDate <= REGISTRATION_END_DATE;
   const registrationStatusMessage =
     currentIndiaDate > REGISTRATION_END_DATE
-      ? "Registration closed on May 15th, 2026."
+      ? "Registration closed on May 19th, 2026."
       : "";
 
   useEffect(() => {
