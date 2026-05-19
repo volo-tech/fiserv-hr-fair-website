@@ -4,23 +4,31 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 
-const REGISTRATION_END_DATE = "2026-05-19";
+const TWENTY_FIRST_MAY_REGISTRATION_CUTOFF = "2026-05-20T18:00";
 const SLOT_AVAILABILITY_API_URL =
   "https://webapp.canswer.dcodecare.com/rest/pes/check-slot-availablity";
 
-const getIndiaDateString = () => {
+const getIndiaDateTimeParts = () => {
   const formatter = new Intl.DateTimeFormat("en-US", {
     timeZone: "Asia/Kolkata",
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
   });
   const parts = formatter.formatToParts(new Date());
   const year = parts.find((part) => part.type === "year")?.value;
   const month = parts.find((part) => part.type === "month")?.value;
   const day = parts.find((part) => part.type === "day")?.value;
+  const hour = parts.find((part) => part.type === "hour")?.value;
+  const minute = parts.find((part) => part.type === "minute")?.value;
 
-  return `${year}-${month}-${day}`;
+  return {
+    date: `${year}-${month}-${day}`,
+    dateTime: `${year}-${month}-${day}T${hour}:${minute}`,
+  };
 };
 
 const getBackendCityValue = (city) =>
@@ -53,11 +61,18 @@ export default function HealthCheckupForm() {
   const [slotAvailabilityType, setSlotAvailabilityType] = useState("");
   const [isCheckingSlot, setIsCheckingSlot] = useState(false);
   const [isSlotAvailable, setIsSlotAvailable] = useState(true);
-  const currentIndiaDate = getIndiaDateString();
-  const isRegistrationOpen = currentIndiaDate <= REGISTRATION_END_DATE;
-  const registrationStatusMessage =
-    currentIndiaDate > REGISTRATION_END_DATE
-      ? "Registration closed on May 19th, 2026."
+  const currentIndiaDateTime = getIndiaDateTimeParts();
+  const isTwentyFirstMayRegistrationOpen =
+    currentIndiaDateTime.dateTime <= TWENTY_FIRST_MAY_REGISTRATION_CUTOFF;
+  const isRegistrationOpen = isTwentyFirstMayRegistrationOpen;
+  const registrationStatusMessage = !isTwentyFirstMayRegistrationOpen
+    ? "Registration has been closed."
+    : "";
+  const selectedDateRegistrationMessage =
+    date === "20th May, 2026"
+      ? "Registration for May 20th, 2026 slots is closed."
+      : date === "21st May, 2026" && !isTwentyFirstMayRegistrationOpen
+      ? "Registration has been closed."
       : "";
 
   useEffect(() => {
@@ -74,6 +89,14 @@ export default function HealthCheckupForm() {
       setSlotAvailabilityMessage("");
       setSlotAvailabilityType("");
       setIsSlotAvailable(true);
+      setIsCheckingSlot(false);
+      return;
+    }
+
+    if (selectedDateRegistrationMessage) {
+      setSlotAvailabilityMessage("");
+      setSlotAvailabilityType("");
+      setIsSlotAvailable(false);
       setIsCheckingSlot(false);
       return;
     }
@@ -129,7 +152,12 @@ export default function HealthCheckupForm() {
     return () => {
       isCancelled = true;
     };
-  }, [date, location, time]);
+  }, [
+    date,
+    location,
+    selectedDateRegistrationMessage,
+    time,
+  ]);
 
   const sendOtp = async () => {
     if (!isRegistrationOpen) {
@@ -229,6 +257,11 @@ export default function HealthCheckupForm() {
       !email.toLowerCase().includes("@volohealth.in")
     ) {
       setMessage("Please enter your official email id.");
+      setMessageType("error");
+      return false;
+    }
+    if (selectedDateRegistrationMessage) {
+      setMessage(selectedDateRegistrationMessage);
       setMessageType("error");
       return false;
     }
@@ -599,7 +632,7 @@ export default function HealthCheckupForm() {
                             disabled={!isRegistrationOpen}
                           >
                             <option value="">-- Select Date --</option>
-                            <option value="20th May, 2026">
+                            <option value="20th May, 2026" disabled>
                               20th May, 2026
                             </option>
                             <option value="21st May, 2026">
